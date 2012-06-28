@@ -22,16 +22,23 @@ function getNumberOfPages(total, resultSize) {
 }
 function logEntryPagerWriter(writeElementId, data, currentPage) {
 
+    console.log(currentPage);
+
     var total = data.hits.total;
     var resultSize = data.hits.hits.length;
+
+    if (resultSize == 0) {
+        return;
+    }
 
     var pageButtonsElement = $("#" + writeElementId + ' .btn-group');
 
     pageButtonsElement.empty();
 
-    if (pageButtonsElement.length > 0) {
+    var numberOfPages = getNumberOfPages(total, resultSize);
 
-        var numberOfPages = getNumberOfPages(total, resultSize);
+    if (pageButtonsElement.length > 0 && numberOfPages > 1) {
+
         var numerOfPagesToLink = numberOfPages;
         var appendLastElement = false;
 
@@ -54,7 +61,6 @@ function logEntryPagerWriter(writeElementId, data, currentPage) {
         }
 
         if (appendLastElement) {
-
             pageButtonsElement.append(' <button class="btn">' + '...' + '</button>');
             pageButtonsElement.append('<button class="btn">' + 'Next &rarr;' + '</button>');
 
