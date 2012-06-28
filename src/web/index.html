@@ -5,28 +5,12 @@
     <title>Edna Goes Elastic</title>
     <meta name="description" content="Edna Goes Elastic">
 
-    <!-- CSS -->
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="lib/jquery/ghusse-jQRangeSlider/css/classic.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/main.css?v=1.0">
 
-    <!-- JS Libs -->
-    <script type="text/javascript" src="lib/jquery/jquery-1.7.2.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="lib/jquery/ui/jquery-ui-1.8.21.custom.min.js" charset="utf-8"></script>
-    <!-- Debug -->
-    <script type="text/javascript" src="lib/jquery/ghusse-jQRangeSlider/lib/jquery.mousewheel.min.js"></script>
-    <script src="lib/jquery/ghusse-jQRangeSlider/jQRangeSliderMouseTouch.js"></script>
-    <script src="lib/jquery/ghusse-jQRangeSlider/jQRangeSliderDraggable.js"></script>
-    <script src="lib/jquery/ghusse-jQRangeSlider/jQRangeSliderHandle.js"></script>
-    <script src="lib/jquery/ghusse-jQRangeSlider/jQRangeSliderBar.js"></script>
-    <script src="lib/jquery/ghusse-jQRangeSlider/jQRangeSliderLabel.js"></script>
-    <script src="lib/jquery/ghusse-jQRangeSlider/jQRangeSlider.js"></script>
-    <script src="lib/jquery/ghusse-jQRangeSlider/jQDateRangeSliderHandle.js"></script>
-    <script src="lib/jquery/ghusse-jQRangeSlider/jQDateRangeSlider.js"></script>
-    <script src="lib/jquery/ghusse-jQRangeSlider/jQEditRangeSliderLabel.js"></script>
-    <script src="lib/jquery/ghusse-jQRangeSlider/jQEditRangeSlider.js"></script>
-    <!-- /Debug -->
-
+    <script src="lib/jquery-1.7.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="app/writer.js" type="text/javascript" charset="utf-8"></script>
+    <script src="app/query.js" type="text/javascript" charset="utf-8"></script>
     <script src="app/main.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
@@ -43,76 +27,19 @@
         </div>
         <div id="east" class="span8 result-set">
 
-            <div class="row result">
-                <h3><a href="#">Refaktorering av Accounts (filter)</a></h3>
-
-                <div>Enonic - Enonic CMS 5 - Community Edition (DOTT)</div>
-                <div>
-                    <span>31.05.2011</span>
-                    <span class="badge badge-success">7,5t</span>
-                </div>
-            </div>
-            <div class="row result">
-                <h3><a href="#">Restructure the extension. Make it ready for the AMD 1.8 architecture.- Create todo document.</a></h3>
-
-                <div>Enonic - Enonic Labs</div>
-                <div>
-                    <span>31.05.2011</span>
-                    <span class="badge badge-success">4t</span>
-                </div>
-            </div>
-            <div class="row result">
-                <h3><a href="#">Activity Stream</a></h3>
-
-                <div>Enonic - Enonic CMS 5 - Community Edition (DOTT)</div>
-                <div>
-                    <span>31.05.2011</span>
-                    <span class="badge badge-success">6t</span>
-                </div>
-            </div>
-            <div class="row result">
-                <h3><a href="#">Activity Stream</a></h3>
-
-                <div>Enonic - Enonic CMS 5 - Community Edition (DOTT)</div>
-                <div>
-                    <span>31.05.2011</span>
-                    <span class="badge badge-success">2t</span>
-                </div>
-            </div>
-            <div class="row result">
-                <h3><a href="#">Supportmote</a></h3>
-
-                <div>Enonic - Internal activities</div>
-                <div>
-                    <span>31.05.2011</span>
-                    <span class="badge badge-success">1t</span>
-                </div>
-            </div>
             <div class="btn-toolbar">
                 <div class="btn-group">
-                    <button class="btn">1</button>
-                    <button class="btn">2</button>
-                    <button class="btn">3</button>
-                    <button class="btn">4</button>
-                    <button class="btn">5</button>
-                    <button class="btn">6</button>
-                    <button class="btn">7</button>
-                    <button class="btn">8</button>
-                    <button class="btn">9</button>
-                    <button class="btn">10</button>
+
                 </div>
             </div>
+
+            <div class="resultRows">
+                &nbsp;
+            </div>
+
         </div>
+
     </div>
-</div>
-
-
-<div id="date-range-slider"></div>
-<script>
-    $(document).ready(function () {
-        $("#date-range-slider").dateRangeSlider();
-    });
-</script>
 
 </body>
 </html>

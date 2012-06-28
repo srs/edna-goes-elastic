@@ -16,3 +16,7 @@ input {
 .result {
     margin-bottom: 1em;
 }
+
+.label-resource {
+    background-color: #c67605;
+}
