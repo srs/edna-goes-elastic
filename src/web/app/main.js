@@ -14,7 +14,7 @@ function buildQuery(queryString, page, size) {
 
 $(document).ready(function () {
 
-    var query = buildQuery('{ "query": { "match_all": {} }}', 0, 3);
+    var query = buildQuery('{ "query": { "match_all": {} }}', 0, 5);
 
     fetchDataToElement(query, 'east', logEntryWriter, 1);
 
@@ -26,7 +26,7 @@ $(document).ready(function () {
 
         var currPage = button.attr("data-pagenum");
 
-        var query = buildQuery('{ "query": { "match_all": {} }}', currPage, 3);
+        var query = buildQuery('{ "query": { "match_all": {} }}', currPage, 5);
 
         console.log(JSON.stringify(query));
 
