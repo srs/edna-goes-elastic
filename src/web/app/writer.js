@@ -37,19 +37,33 @@ function logEntryPagerWriter(writeElementId, data, currentPage) {
 
     if (pageButtonsElement.length > 0 && numberOfPages > 1) {
 
-        var numerOfPagesToLink = numberOfPages;
+        var numberOfPagesToShow = numberOfPages;
         var appendLastElement = false;
 
-        console.log("Number of PagesToLink: " + numerOfPagesToLink);
+        console.log("Number of PagesToLink: " + numberOfPagesToShow);
 
         if (numberOfPages > PAGER_MAX_PAGES) {
-            numerOfPagesToLink = PAGER_MAX_PAGES;
+            numberOfPagesToShow = PAGER_MAX_PAGES;
             appendLastElement = true;
         }
+        var rangeStart;
+        var rangeEnd;
+
+        if (currentPage - (numberOfPagesToShow/2) <= 0) {
+            rangeStart = 1;
+            rangeEnd = PAGER_MAX_PAGES;
+        } else if (currentPage + (numberOfPagesToShow/2) >= PAGER_MAX_PAGES) {
+            rangeStart = PAGER_MAX_PAGES - numberOfPagesToShow;
+            rangeEnd = PAGER_MAX_PAGES;
+        } else {
+            rangeStart = currentPage - (numberOfPagesToShow/2);
+            rangeEnd = currentPage + (numberOfPagesToShow/2);
+        }
+
 
         pageButtonsElement.append('<button class="btn disabled">&larr; Previous</button>');
 
-        for (var i = 1; i <= numerOfPagesToLink; i++) {
+        for (var i = rangeStart; i <= rangeEnd; i++) {
 
             if (i == currentPage) {
                 pageButtonsElement.append('<button class="btn active" data-toggle="button">' + i + '</button>');
