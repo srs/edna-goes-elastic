@@ -1,6 +1,6 @@
 function fetchDataToElement(query, elementId, writerFunction, page) {
-    $.ajax({
-        url: "http://leela:9200/edna3000/edna/_search",
+     $.ajax({
+        url: SEARCH_URL,
         type: "POST",
         dataType: "json",
         data: JSON.stringify(query),
@@ -13,6 +13,30 @@ function fetchDataToElement(query, elementId, writerFunction, page) {
             resultRowsElements.fadeIn(100);
         }
     });
+}
+
+function buildSearchFilter(filterString, page, size) {
+
+    var queryExpression;
+
+    if (filterString === "") {
+        queryExpression = '{"query" : {"match_all" : {}}}';
+    } else {
+        queryExpression = '{"query" : { "wildcard" : { "_all" : "' + filterString + '" }}}';
+    }
+
+    console.log(queryExpression);
+
+    var newFrom = ( (page-1) * size) + 1;
+
+    var queryObject = JSON.parse(queryExpression);
+    queryObject.from = newFrom;
+    queryObject.size = size;
+    queryObject.sort = {
+        "logDate": "desc"
+    };
+
+    return queryObject;
 }
 
 

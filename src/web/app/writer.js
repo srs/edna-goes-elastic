@@ -1,5 +1,3 @@
-var PAGER_MAX_PAGES = 10;
-var CURRENT_PAGE = 1;
 
 function writeLogEntryElements(writeElementId, logEntryElement) {
     var logEntrySource = logEntryElement._source;
