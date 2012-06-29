@@ -1,4 +1,3 @@
-
 function writeLogEntryElements(writeElementId, logEntryElement) {
     var logEntrySource = logEntryElement._source;
     $("#" + writeElementId + ' .resultRows').append('<div class="row result">' +
@@ -14,10 +13,14 @@ function writeLogEntryElements(writeElementId, logEntryElement) {
 }
 
 
-function getNumberOfPages(total, resultSize) {
-    var numberOfPages = Math.ceil(total / resultSize);
+function getNumberOfPagesNeeded(total, resultSize) {
+
+    console.log("Total: " + total + ", size: " + resultSize);
+
+    var numberOfPages = Math.ceil(total / resultSize) - 1;
     return numberOfPages;
 }
+
 function logEntryPagerWriter(writeElementId, data, currentPage) {
 
     console.log(currentPage);
@@ -30,38 +33,68 @@ function logEntryPagerWriter(writeElementId, data, currentPage) {
     }
 
     var pageButtonsElement = $("#" + writeElementId + ' .btn-group');
-
     pageButtonsElement.empty();
 
-    var numberOfPages = getNumberOfPages(total, resultSize);
+    var numberOfPagesNeeded = getNumberOfPagesNeeded(total, RESULT_COUNT);
 
-    if (pageButtonsElement.length > 0 && numberOfPages > 1) {
+    var doAddPagination = pageButtonsElement.length > 0 && numberOfPagesNeeded > 1;
+    if (doAddPagination) {
 
-        var numberOfPagesToShow = numberOfPages;
-        var appendLastElement = false;
+        var numberOfPagesToShow = numberOfPagesNeeded;
+        var activateNextButton = false;
+        var activatePreviousButton = false;
 
-        console.log("Number of PagesToLink: " + numberOfPagesToShow);
-
-        if (numberOfPages > PAGER_MAX_PAGES) {
-            numberOfPagesToShow = PAGER_MAX_PAGES;
-            appendLastElement = true;
+        if (currentPage > 1) {
+            activatePreviousButton = true;
         }
+
+        if (numberOfPagesNeeded > PAGER_MAX_PAGES) {
+            numberOfPagesToShow = PAGER_MAX_PAGES;
+        }
+
         var rangeStart;
         var rangeEnd;
 
-        if (currentPage - (numberOfPagesToShow/2) <= 0) {
+        var pageOffsetFromCurrent = (numberOfPagesToShow / 2);
+        var startAtBeginning = parseInt(currentPage) - parseInt(pageOffsetFromCurrent) <= 0;
+        var endAtNumberOfPagesNeeded = parseInt(currentPage) + parseInt(pageOffsetFromCurrent) >= parseInt(numberOfPagesNeeded);
+
+        console.log("pageOffFromCurr: " + pageOffsetFromCurrent + ", startAtBegin: " + startAtBeginning + ", endAtNumb: " +
+                    endAtNumberOfPagesNeeded);
+
+        console.log("numberOfPagesNeeded: " + numberOfPagesNeeded + ", numberOfPagesToShow: " + numberOfPagesToShow);
+
+        if (startAtBeginning) {
+            console.log("in startAt");
             rangeStart = 1;
             rangeEnd = PAGER_MAX_PAGES;
-        } else if (currentPage + (numberOfPagesToShow/2) >= PAGER_MAX_PAGES) {
-            rangeStart = PAGER_MAX_PAGES - numberOfPagesToShow;
-            rangeEnd = PAGER_MAX_PAGES;
+        } else if (endAtNumberOfPagesNeeded) {
+            console.log("in endAtNumber");
+            rangeStart = parseInt(numberOfPagesNeeded) - parseInt(numberOfPagesToShow);
+            rangeEnd = numberOfPagesNeeded;
         } else {
-            rangeStart = currentPage - (numberOfPagesToShow/2);
-            rangeEnd = currentPage + (numberOfPagesToShow/2);
+            console.log("in else");
+            rangeStart = parseInt(currentPage) - parseInt(pageOffsetFromCurrent) + 1;
+            rangeEnd = parseInt(currentPage) + parseInt(pageOffsetFromCurrent) - 1;
         }
 
+        console.log("start: " + rangeStart + ", rangeEnd: " + rangeEnd);
 
-        pageButtonsElement.append('<button class="btn disabled">&larr; Previous</button>');
+        if (currentPage <= rangeEnd) {
+            activateNextButton = true;
+        }
+
+        if (activatePreviousButton) {
+            pageButtonsElement.append('<button class="btn">&larr; Previous</button>');
+        } else {
+            pageButtonsElement.append('<button class="btn disabled">&larr; Previous</button>');
+        }
+
+        var addFirstPage = parseInt(rangeStart) > 1;
+
+        if (addFirstPage) {
+            pageButtonsElement.append('<button class="btn" data-pagenum="' + 1 + '">' + 1 + '....</button>');
+        }
 
         for (var i = rangeStart; i <= rangeEnd; i++) {
 
@@ -72,12 +105,20 @@ function logEntryPagerWriter(writeElementId, data, currentPage) {
             }
         }
 
-        if (appendLastElement) {
-            pageButtonsElement.append(' <button class="btn">' + '...' + '</button>');
-            pageButtonsElement.append('<button class="btn">' + 'Next &rarr;' + '</button>');
-
+        var addLastPage = parseInt(rangeEnd) < parseInt(numberOfPagesNeeded);
+        if (addLastPage) {
+            pageButtonsElement.append('<button class="btn" data-pagenum="' + parseInt(numberOfPagesNeeded) + '">....' + parseInt(numberOfPagesNeeded) +
+                                      '</button>');
         }
+
+        if (activateNextButton) {
+            pageButtonsElement.append('<button class="btn">' + 'Next &rarr;' + '</button>');
+        } else {
+            pageButtonsElement.append('<button class="btn disabled">' + 'Next &rarr;' + '</button>');
+        }
+
     }
+
 }
 
 function createLinkToPage(pageNum) {

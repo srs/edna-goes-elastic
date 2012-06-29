@@ -7,6 +7,8 @@ function handleButtonEvents() {
         $('.btn').removeClass("active");
         button.addClass("active");
         var currPage = button.attr("data-pagenum");
+        console.log("CurrPage: " + currPage );
+
         var query = buildSearchFilter(getFilterValue(), currPage, 5);
         fetchDataToElement(query, 'east', logEntryWriter, currPage);
     });
@@ -26,9 +28,9 @@ function handleFilterChanges() {
 
         var filterValue = getFilterValue();
 
-        if (filterValue.length >= 3) {
+        if (filterValue.length == 0 || filterValue.length >= 3) {
             delay(function () {
-                var query = buildSearchFilter(filterValue, 1, 5);
+                var query = buildSearchFilter(filterValue, 0, 5);
                 console.log(JSON.stringify(query));
                 fetchDataToElement(query, 'east', logEntryWriter, 1);
             }, 200);
@@ -38,7 +40,7 @@ function handleFilterChanges() {
 
 $(document).ready(function () {
 
-    var query = buildSearchFilter($("#searchField").val(), 1, 5);
+    var query = buildSearchFilter($("#searchField").val(), 0, 5);
 
     fetchDataToElement(query, 'east', logEntryWriter, 1);
     handleButtonEvents();

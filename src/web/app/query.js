@@ -10,7 +10,7 @@ function fetchDataToElement(query, elementId, writerFunction, page) {
             resultRowsElements.empty();
             resultRowsElements.hide();
             writerFunction.call(window, elementId, data, page);
-            resultRowsElements.fadeIn(100);
+            resultRowsElements.fadeIn(RESULT_FADEIN_MS);
         }
     });
 }
@@ -36,7 +36,7 @@ function buildSearchFilter(filterString, page, size) {
 
     console.log(queryExpression);
 
-    var newFrom = ( (page - 1) * size) + 1;
+    var newFrom = ( (page ) * size) + 1;
 
     var queryObject = JSON.parse(queryExpression);
     queryObject.from = newFrom;
