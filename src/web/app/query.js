@@ -1,5 +1,5 @@
 function fetchDataToElement(query, elementId, writerFunction, page) {
-     $.ajax({
+    $.ajax({
         url: SEARCH_URL,
         type: "POST",
         dataType: "json",
@@ -21,13 +21,22 @@ function buildSearchFilter(filterString, page, size) {
 
     if (filterString === "") {
         queryExpression = '{"query" : {"match_all" : {}}}';
-    } else {
+    } else if (filterString.indexOf("*") >= 0) {
         queryExpression = '{"query" : { "wildcard" : { "_all" : "' + filterString + '" }}}';
+    } else {
+
+        var queryFieldArray = filterString.split(" ");
+
+        if (queryFieldArray.length > 1) {
+            queryExpression = '{ "query": { "text": { "_all": { "operator": "and", "query": "' + filterString + '" }}}}';
+        } else {
+            queryExpression = '{"query" : { "term" : { "_all" : "' + filterString + '" }}}';
+        }
     }
 
     console.log(queryExpression);
 
-    var newFrom = ( (page-1) * size) + 1;
+    var newFrom = ( (page - 1) * size) + 1;
 
     var queryObject = JSON.parse(queryExpression);
     queryObject.from = newFrom;
@@ -38,6 +47,7 @@ function buildSearchFilter(filterString, page, size) {
 
     return queryObject;
 }
+
 
 
 
