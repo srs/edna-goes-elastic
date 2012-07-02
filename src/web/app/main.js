@@ -7,7 +7,7 @@ function handleButtonEvents() {
         $('.btn').removeClass("active");
         button.addClass("active");
         var currPage = button.attr("data-pagenum");
-        console.log("CurrPage: " + currPage );
+        console.log("CurrPage: " + currPage);
 
         var query = buildSearchFilter(getFilterValue(), currPage, RESULT_COUNT);
         fetchDataToElement(query, 'east', logEntryWriter, currPage);
@@ -32,10 +32,17 @@ function handleFilterChanges() {
             delay(function () {
                 var query = buildSearchFilter(filterValue, 0, RESULT_COUNT);
                 console.log(JSON.stringify(query));
-                fetchDataToElement(query, 'east', logEntryWriter, 1);
+                fetchDataToElement(query, 'searchResult', logEntryWriter, 1);
 
-                var statQuery = buildStatsQuery(filterValue);
-                fetchDataToElement(statQuery, 'west', statsWriter, 1);
+                var statQuery = buildStatsQuery(filterValue, "hours");
+                fetchDataToElement(statQuery, 'hoursStats', statsWriter, 1);
+
+                var dateHistogram = buildDateFacet(filterValue, "logDate", "year");
+                fetchDataToElement(dateHistogram, 'dateHistogram', dateHistogramWriter, 1);
+
+                var customerFacet = buildTermFacet(filterValue, "customer", 10);
+                fetchDataToElement(customerFacet, 'customerFacet', termFacetWriter, 1);
+
             }, 200);
         }
     });
@@ -44,11 +51,18 @@ function handleFilterChanges() {
 $(document).ready(function () {
 
     var filterValue = $("#searchField").val();
-    var query = buildSearchFilter(filterValue, 0, RESULT_COUNT);
-    fetchDataToElement(query, 'east', logEntryWriter, 1);
 
-    var statQuery = buildStatsQuery(filterValue);
-    fetchDataToElement(statQuery, 'west', statsWriter, 1);
+    var query = buildSearchFilter(filterValue, 0, RESULT_COUNT);
+    fetchDataToElement(query, 'searchResult', logEntryWriter, 1);
+
+    var statQuery = buildStatsQuery(filterValue, "hours");
+    fetchDataToElement(statQuery, 'hoursStats', statsWriter, 1);
+
+    var dateHistogram = buildDateFacet(filterValue, "logDate", "year");
+    fetchDataToElement(dateHistogram, 'dateHistogram', dateHistogramWriter, 1);
+
+    var customerFacet = buildTermFacet(filterValue, "customer", 10);
+    fetchDataToElement(customerFacet, 'customerFacet', termFacetWriter, 1);
 
     handleButtonEvents();
     handleFilterChanges();
