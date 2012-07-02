@@ -131,7 +131,7 @@ function logEntryWriter(writeElementId, data, page) {
         writeLogEntryElements(writeElementId, logEntry)
     });
 
-    // logEntryPagerWriter(writeElementId, data, page);
+    logEntryPagerWriter(writeElementId, data, page);
 }
 
 function statsWriter(writeElementId, data, page) {

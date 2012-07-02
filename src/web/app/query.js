@@ -15,58 +15,59 @@ function fetchDataToElement(query, elementId, writerFunction, page) {
     });
 }
 
-function buildSearchFilter(filterString, page, size) {
+function applyFilterQuery(queryObj, filterString) {
 
-    var queryExpression;
-
-    if (filterString === "") {
-        queryExpression = '{"query" : {"match_all" : {}}}';
-    } else if (filterString.indexOf("*") >= 0) {
-        queryExpression = '{"query" : { "wildcard" : { "_all" : "' + filterString + '" }}}';
+    queryObj.query = {};
+    if (filterString == "") {
+        queryObj.query.match_all = {};
+    } else if ((filterString.indexOf("*") >= 0)) {
+        queryObj.query.wildcard = {};
+        queryObj.query.wildcard._all = filterString;
     } else {
-
         var queryFieldArray = filterString.split(" ");
 
         if (queryFieldArray.length > 1) {
-            queryExpression = '{ "query": { "text": { "_all": { "operator": "and", "query": "' + filterString + '" }}}}';
+            queryObj.query.text = {};
+            queryObj.query.text._all = {};
+            queryObj.query.text._all.operator = "and";
+            queryObj.query.text._all.query = filterString;
         } else {
-            queryExpression = '{"query" : { "term" : { "_all" : "' + filterString + '" }}}';
+            queryObj.query.term = {};
+            queryObj.query.term._all = filterString;
         }
     }
-
-    console.log(queryExpression);
-
-    var newFrom = ( (page ) * size) + 1;
-
-    var queryObject = JSON.parse(queryExpression);
-    queryObject.from = newFrom;
-    queryObject.size = size;
-    queryObject.sort = {
-        "logDate": "desc"
-    };
-
-    return queryObject;
 }
 
+function applySizeSettings(queryObject, from, size) {
+    queryObject.from = from;
+    queryObject.size = size;
+}
+
+function applySort(queryObject, sortField) {
+    queryObject.sort = {};
+    queryObject.sort[sortField] = "desc";
+}
+
+function buildSearchFilter(filterString, page, size) {
+
+    var queryObj = {};
+    applyFilterQuery(queryObj, filterString);
+    var newFrom = ( (page ) * size);
+    applySizeSettings(queryObj, newFrom, size);
+    applySort(queryObj, "logDate");
+    return queryObj;
+}
 
 function buildStatsQuery(filterString) {
 
-    var queryObj = {
-        "query": {
-            "term": {
-                "_all" : "test"
-            }
-        },
-        "facets": {
-            "stat1": {
-                "statistical": {
-                    "field": "hours"
-                }
-            }
-        }
-    };
+    var queryObj = {};
+    applyFilterQuery(queryObj, filterString);
+    applySizeSettings(queryObj, 0, 0);
 
-    queryObj.query.term._all = filterString;
+    queryObj.facets = {};
+    queryObj.facets.stat1 = {};
+    queryObj.facets.stat1.statistical = {};
+    queryObj.facets.stat1.statistical.field = "hours";
 
     return queryObj;
 }
