@@ -6,7 +6,7 @@ function fetchDataToElement(query, elementId, writerFunction, page) {
         data: JSON.stringify(query),
         success: function (data) {
 
-            var resultRowsElements = $('.resultRows');
+            var resultRowsElements = $('#' + elementId + ' .resultRows');
             resultRowsElements.empty();
             resultRowsElements.hide();
             writerFunction.call(window, elementId, data, page);
@@ -46,6 +46,29 @@ function buildSearchFilter(filterString, page, size) {
     };
 
     return queryObject;
+}
+
+
+function buildStatsQuery(filterString) {
+
+    var queryObj = {
+        "query": {
+            "term": {
+                "_all" : "test"
+            }
+        },
+        "facets": {
+            "stat1": {
+                "statistical": {
+                    "field": "hours"
+                }
+            }
+        }
+    };
+
+    queryObj.query.term._all = filterString;
+
+    return queryObj;
 }
 
 

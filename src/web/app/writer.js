@@ -1,13 +1,12 @@
 function writeLogEntryElements(writeElementId, logEntryElement) {
     var logEntrySource = logEntryElement._source;
     $("#" + writeElementId + ' .resultRows').append('<div class="row result">' +
-                                                    '<h3><a href="#">' + logEntrySource.description + '</a></h3>' +
+                                                    '<h4><a href="#">' + logEntrySource.description + '</a></h4>' +
+                                                    '<div>' + logEntrySource.customer + ' - ' + logEntrySource.project + '</div>' +
                                                     '<div>' +
                                                     '<span class="label label-resource">' + logEntrySource.resource + '</span>' + '&nbsp;' +
-                                                    '<span class="badge badge-success">' + logEntrySource.hours + '</span>' +
-                                                    '</div>' +
-                                                    '<div>' + logEntrySource.customer + ' - ' + logEntrySource.project + '</div>' +
-                                                    '<div>' + '<span>' + logEntrySource.logDate + '</span>&nbsp;' + '</div>' +
+                                                    '<span class="badge badge-error">' + logEntrySource.logDate + '</span>&nbsp;' +
+                                                    '<span class="badge badge-success">' + logEntrySource.hours + '</span>' + '&nbsp;' +
                                                     '</div>' +
                                                     '</div>');
 }
@@ -85,21 +84,21 @@ function logEntryPagerWriter(writeElementId, data, currentPage) {
         }
 
         if (activatePreviousButton) {
-            pageButtonsElement.append('<button class="btn">&larr; Previous</button>');
+            pageButtonsElement.append('<button class="btn btn-mini">&larr; Previous</button>');
         } else {
-            pageButtonsElement.append('<button class="btn disabled">&larr; Previous</button>');
+            pageButtonsElement.append('<button class="btn btn-mini disabled">&larr; Previous</button>');
         }
 
         var addFirstPage = parseInt(rangeStart) > 1;
 
         if (addFirstPage) {
-            pageButtonsElement.append('<button class="btn" data-pagenum="' + 1 + '">' + 1 + '....</button>');
+            pageButtonsElement.append('<button class="btn btn-mini" data-pagenum="' + 1 + '">' + 1 + '....</button>');
         }
 
         for (var i = rangeStart; i <= rangeEnd; i++) {
 
             if (i == currentPage) {
-                pageButtonsElement.append('<button class="btn active" data-toggle="button">' + i + '</button>');
+                pageButtonsElement.append('<button class="btn btn-mini active" data-toggle="button">' + i + '</button>');
             } else {
                 pageButtonsElement.append(createLinkToPage(i));
             }
@@ -107,14 +106,15 @@ function logEntryPagerWriter(writeElementId, data, currentPage) {
 
         var addLastPage = parseInt(rangeEnd) < parseInt(numberOfPagesNeeded);
         if (addLastPage) {
-            pageButtonsElement.append('<button class="btn" data-pagenum="' + parseInt(numberOfPagesNeeded) + '">....' + parseInt(numberOfPagesNeeded) +
+            pageButtonsElement.append('<button class="btn btn-mini" data-pagenum="' + parseInt(numberOfPagesNeeded) + '">....' +
+                                      parseInt(numberOfPagesNeeded) +
                                       '</button>');
         }
 
         if (activateNextButton) {
-            pageButtonsElement.append('<button class="btn">' + 'Next &rarr;' + '</button>');
+            pageButtonsElement.append('<button class="btn btn-mini">' + 'Next &rarr;' + '</button>');
         } else {
-            pageButtonsElement.append('<button class="btn disabled">' + 'Next &rarr;' + '</button>');
+            pageButtonsElement.append('<button class="btn btn-mini disabled">' + 'Next &rarr;' + '</button>');
         }
 
     }
@@ -122,7 +122,7 @@ function logEntryPagerWriter(writeElementId, data, currentPage) {
 }
 
 function createLinkToPage(pageNum) {
-    return '<button class="btn" data-pagenum="' + pageNum + '">' + pageNum + '</button>';
+    return '<button class="btn btn-mini" data-pagenum="' + pageNum + '">' + pageNum + '</button>';
 }
 
 function logEntryWriter(writeElementId, data, page) {
@@ -131,5 +131,19 @@ function logEntryWriter(writeElementId, data, page) {
         writeLogEntryElements(writeElementId, logEntry)
     });
 
-    logEntryPagerWriter(writeElementId, data, page);
+    // logEntryPagerWriter(writeElementId, data, page);
+}
+
+function statsWriter(writeElementId, data, page) {
+
+    var resultRows = $("#" + writeElementId + ' .resultRows');
+
+    console.log(data.facets.stat1);
+
+    resultRows.append("<h3>Hours:</h3> ");
+    resultRows.append("<h4>hits: " + data.facets.stat1.count + "</h4> ");
+    resultRows.append("<h4>sum: " + Math.round(data.facets.stat1.total) + "</h4> ");
+    resultRows.append("<h4>avg: " + Math.round(data.facets.stat1.mean) + "</h4> ");
+    resultRows.append("<h4>min: " + Math.round(data.facets.stat1.min) + "</h4> ");
+    resultRows.append("<h4>max: " + Math.round(data.facets.stat1.max) + "</h4> ");
 }

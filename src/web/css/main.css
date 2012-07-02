@@ -20,3 +20,22 @@ input {
 .label-resource {
     background-color: #c67605;
 }
+
+.btn-small.active,
+.btn-small:active {
+    padding: 5px 9px;
+    font-size: 11px;
+    line-height: 16px;
+    background-color: #eae7e6;
+    margin-top: -1px;
+}
+
+.btn-small.disabled,
+.btn-small[disabled] {
+    padding: 5px 9px;
+    font-size: 11px;
+    line-height: 16px;
+    background-color: #e6e2e5;
+    margin-top: -1px;
+}
+
