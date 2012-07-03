@@ -2,7 +2,8 @@ function getFilterValue() {
     return $("#searchField").val().toLowerCase();
 }
 function handleButtonEvents() {
-    $("body").on("click", ".btn-mini", function (event) {
+    $("body").on("click", ".btn", function (event) {
+
         var button = $(event.currentTarget);
         $('.btn').removeClass("active");
         button.addClass("active");
@@ -10,7 +11,7 @@ function handleButtonEvents() {
         console.log("CurrPage: " + currPage);
 
         var query = buildSearchFilter(getFilterValue(), currPage, RESULT_COUNT);
-        fetchDataToElement(query, 'east', logEntryWriter, currPage);
+        fetchDataToElement(query, 'searchResult', logEntryWriter, currPage);
     });
 }
 
@@ -40,8 +41,11 @@ function handleFilterChanges() {
                 var dateHistogram = buildDateFacet(filterValue, "logDate", "year");
                 fetchDataToElement(dateHistogram, 'dateHistogram', dateHistogramWriter, 1);
 
-                var customerFacet = buildTermFacet(filterValue, "customer", 10);
-                fetchDataToElement(customerFacet, 'customerFacet', termFacetWriter, 1);
+             //   var customerFacet = buildTermFacet(filterValue, "customer", 10);
+             //   fetchDataToElement(customerFacet, 'customerFacet', termFacetWriter, 1);
+
+                var customerHoursFacet = buildTermsStatFacet(filterValue, "customer", "hours", 10);
+                fetchDataToElement(customerHoursFacet, 'hoursPerCustomerFacet', hoursPerCustomerWriter, 1);
 
             }, 200);
         }
@@ -61,8 +65,11 @@ $(document).ready(function () {
     var dateHistogram = buildDateFacet(filterValue, "logDate", "year");
     fetchDataToElement(dateHistogram, 'dateHistogram', dateHistogramWriter, 1);
 
-    var customerFacet = buildTermFacet(filterValue, "customer", 10);
-    fetchDataToElement(customerFacet, 'customerFacet', termFacetWriter, 1);
+    //var customerFacet = buildTermFacet(filterValue, "customer", 10);
+    //fetchDataToElement(customerFacet, 'customerFacet', termFacetWriter, 1);
+
+    var customerHoursFacet = buildTermsStatFacet(filterValue, "customer", "hours", 10);
+    fetchDataToElement(customerHoursFacet, 'hoursPerCustomerFacet', hoursPerCustomerWriter, 1);
 
     handleButtonEvents();
     handleFilterChanges();

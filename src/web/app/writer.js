@@ -1,14 +1,15 @@
 function writeLogEntryElements(writeElementId, logEntryElement) {
     var logEntrySource = logEntryElement._source;
-    $("#" + writeElementId).append('<div class="row result">' +
-                                   '<h4><a href="#">' + logEntrySource.description + '</a></h4>' +
-                                   '<div>' + logEntrySource.customer + ' - ' + logEntrySource.project + '</div>' +
-                                   '<div>' +
-                                   '<span class="label label-resource">' + logEntrySource.resource + '</span>' + '&nbsp;' +
-                                   '<span class="badge badge-error">' + logEntrySource.logDate + '</span>&nbsp;' +
-                                   '<span class="badge badge-success">' + logEntrySource.hours + '</span>' + '&nbsp;' +
-                                   '</div>' +
-                                   '</div>');
+    var rowResult = $("#" + writeElementId);
+    rowResult.append('<div class="row result">' +
+                     '<h4><a href="#">' + logEntrySource.description + '</a></h4>' +
+                     '<div>' + logEntrySource.customer + ' - ' + logEntrySource.project + '</div>' +
+                     '<div>' +
+                     '<span class="label label-resource">' + logEntrySource.resource + '</span>' + '&nbsp;' +
+                     '<span class="badge badge-error">' + logEntrySource.logDate + '</span>&nbsp;' +
+                     '<span class="badge badge-success">' + logEntrySource.hours + '</span>' + '&nbsp;' +
+                     '</div>' +
+                     '</div>');
 }
 
 
@@ -22,22 +23,18 @@ function getNumberOfPagesNeeded(total, resultSize) {
 
 function logEntryPagerWriter(writeElementId, data, currentPage) {
 
-    console.log(currentPage);
-
     var total = data.hits.total;
     var resultSize = data.hits.hits.length;
+    var pageButtonsElement = $("#mainPager");
+    pageButtonsElement.empty();
 
     if (resultSize == 0) {
         return;
     }
 
-    var pageButtonsElement = $("#mainPager");
-    pageButtonsElement.empty();
-
     var numberOfPagesNeeded = getNumberOfPagesNeeded(total, RESULT_COUNT);
 
-    var doAddPagination = pageButtonsElement.length > 0 && numberOfPagesNeeded > 1;
-    if (doAddPagination) {
+    if (numberOfPagesNeeded > 1) {
 
         var numberOfPagesToShow = numberOfPagesNeeded;
         var activateNextButton = false;
@@ -58,10 +55,10 @@ function logEntryPagerWriter(writeElementId, data, currentPage) {
         var startAtBeginning = parseInt(currentPage) - parseInt(pageOffsetFromCurrent) <= 0;
         var endAtNumberOfPagesNeeded = parseInt(currentPage) + parseInt(pageOffsetFromCurrent) >= parseInt(numberOfPagesNeeded);
 
-        console.log("pageOffFromCurr: " + pageOffsetFromCurrent + ", startAtBegin: " + startAtBeginning + ", endAtNumb: " +
-                    endAtNumberOfPagesNeeded);
+        //console.log("pageOffFromCurr: " + pageOffsetFromCurrent + ", startAtBegin: " + startAtBeginning + ", endAtNumb: " +
+        //            endAtNumberOfPagesNeeded);
 
-        console.log("numberOfPagesNeeded: " + numberOfPagesNeeded + ", numberOfPagesToShow: " + numberOfPagesToShow);
+        //console.log("numberOfPagesNeeded: " + numberOfPagesNeeded + ", numberOfPagesToShow: " + numberOfPagesToShow);
 
         if (startAtBeginning) {
             console.log("in startAt");
@@ -127,22 +124,19 @@ function createLinkToPage(pageNum) {
 
 function logEntryWriter(writeElementId, data, page) {
 
-    console.log(data);
+    var writeToElement = $("#" + writeElementId);
+    writeToElement.empty();
 
     if (data.hits.hits.length == 0) {
-
-        $("#" + writeElementId).empty();
-        $("#mainPager").empty();
-        $("#" + writeElementId).append('<h3>No hits</h3>')
+        writeToElement.append('<h3>No hits</h3>')
     }
     else {
-
         $.each(data.hits.hits, function (index, logEntry) {
             writeLogEntryElements(writeElementId, logEntry)
         });
-
-        logEntryPagerWriter(writeElementId, data, page);
     }
+
+    logEntryPagerWriter(writeElementId, data, page);
 }
 
 function statsWriter(writeElementId, data, page) {
@@ -151,12 +145,12 @@ function statsWriter(writeElementId, data, page) {
 
     console.log(data.facets.stat1);
 
-    resultRows.append("<h4>Hours:</h4> ");
-    resultRows.append("<h5>hits: " + data.facets.stat1.count + "</h5> ");
-    resultRows.append("<h5>sum: " + Math.round(data.facets.stat1.total) + "</h5> ");
-    resultRows.append("<h5>avg: " + Math.round(data.facets.stat1.mean) + "</h5> ");
-    resultRows.append("<h5>min: " + Math.round(data.facets.stat1.min) + "</h5> ");
-    resultRows.append("<h5>max: " + Math.round(data.facets.stat1.max) + "</h5> ");
+    resultRows.append('<h4>Hours:</h4> ');
+    resultRows.append('<div class="facetEntry">hits: ' + data.facets.stat1.count + "</div> ");
+    resultRows.append('<div class="facetEntry">sum: ' + Math.round(data.facets.stat1.total) + "</div> ");
+    resultRows.append('<div class="facetEntry">avg: ' + Math.round(data.facets.stat1.mean) + "</div> ");
+    resultRows.append('<div class="facetEntry">min: ' + Math.round(data.facets.stat1.min) + "</div> ");
+    resultRows.append('<div class="facetEntry">max: ' + Math.round(data.facets.stat1.max) + "</div> ");
 }
 
 
@@ -166,16 +160,14 @@ function termFacetWriter(writeElementId, data, page) {
 
     console.log(data.facets.tag);
 
-     resultRows.append("<h4>Customers:</h4> ");
+    resultRows.append("<h4>Customers:</h4> ");
 
-     $.each(data.facets.tag.terms, function (index, facetEntry) {
+    $.each(data.facets.tag.terms, function (index, facetEntry) {
 
-     console.log(facetEntry);
-     resultRows.append("<h5>" + facetEntry.term + " (" + facetEntry.count + ")</h5> ");
-     });
-
+        console.log(facetEntry);
+        resultRows.append('<div class="facetEntry">' + facetEntry.term + " (" + facetEntry.count + ")</div> ");
+    });
 }
-
 
 function dateHistogramWriter(writeElementId, data, page) {
 
@@ -187,7 +179,24 @@ function dateHistogramWriter(writeElementId, data, page) {
 
     $.each(data.facets.histo1.entries, function (index, histogramEntry) {
         var date = new Date(histogramEntry.time);
-        resultRows.append("<h5>" + date.getFullYear() + " = " + histogramEntry.count + "</h5> ");
+        resultRows.append('<div class="facetEntry">' + date.getFullYear() + " = " + histogramEntry.count + "</div>");
     });
 }
+
+function hoursPerCustomerWriter(writeElementId, data, page) {
+
+    var resultRows = $("#" + writeElementId);
+
+    console.log(data.facets.tag_term_stat.terms);
+
+    resultRows.append("<h4>Customer hours:</h4> ");
+
+    $.each(data.facets.tag_term_stat.terms, function (index, facetEntry) {
+
+        console.log(facetEntry);
+        resultRows.append('<div class="facetEntry">' + facetEntry.term + " (" + facetEntry.count + ") = " + Math.round(facetEntry.total) +
+                          " hours </div> ");
+    });
+}
+
 

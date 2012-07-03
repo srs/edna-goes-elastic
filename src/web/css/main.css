@@ -39,3 +39,10 @@ input {
     margin-top: -1px;
 }
 
+.facets {
+    margin-bottom: 1em;
+
+    width: 250px;
+    box-shadow: 0 0 5px #B0B0B0;
+}
+
