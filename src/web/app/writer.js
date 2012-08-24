@@ -1,3 +1,5 @@
+var totalHours;
+
 function getAvatarUrl(user, size) {
     var email = user.toLowerCase() + "@enonic.com";
     var hash = md5(email);
@@ -136,15 +138,17 @@ function logEntryWriter(writeElementId, data, page) {
 
 function statsWriter(writeElementId, data, page) {
 
-    var resultRows = $("#" + writeElementId);
+    //var resultRows = $("#" + writeElementId);
 
-    data.facets.stat1.total = roundToOneDecimal(data.facets.stat1.total);
-    data.facets.stat1.mean = roundToOneDecimal(data.facets.stat1.mean);
+   // data.facets.stat1.total = roundToOneDecimal(data.facets.stat1.total);
+   // data.facets.stat1.mean = roundToOneDecimal(data.facets.stat1.mean);
 
-    var source = $("#hour-stats-template").html();
-    var result = Mustache.render(source, data.facets.stat1);
+    totalHours = data.facets.stat1.total;
 
-    resultRows.append(result);
+   // var source = $("#hour-stats-template").html();
+   // var result = Mustache.render(source, data.facets.stat1);
+
+   // resultRows.append(result);
 }
 
 function roundToOneDecimal(number) {
@@ -195,9 +199,11 @@ function topGuysWriter(writeElementId, data, page) {
 
     console.log(data.facets.tag_term_stat.terms);
 
-    $.each( data.facets.tag_term_stat.terms, function (index, facetEntry) {
+    $.each(data.facets.tag_term_stat.terms, function (index, facetEntry) {
 
-        facetEntry.avatarUrl = getAvatarUrl(facetEntry.term, 50);
+        facetEntry.avatarUrl = getAvatarUrl(facetEntry.term, 100);
+
+        facetEntry.percentage = Math.round((facetEntry.total / totalHours) * 100);
 
         var source = $("#top-guys-template").html();
         var result = Mustache.render(source, facetEntry);

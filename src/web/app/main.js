@@ -38,16 +38,16 @@ function handleFilterChanges() {
                 var statQuery = buildStatsQuery(filterValue, "hours");
                 fetchDataToElement(statQuery, 'hoursStats', statsWriter, 1);
 
-                var dateHistogram = buildDateFacet(filterValue, "logDate", "year");
-                fetchDataToElement(dateHistogram, 'dateHistogram', dateHistogramWriter, 1);
+            //    var dateHistogram = buildDateFacet(filterValue, "logDate", "year");
+            //    fetchDataToElement(dateHistogram, 'dateHistogram', dateHistogramWriter, 1);
 
              //   var customerFacet = buildTermFacet(filterValue, "customer", 10);
              //   fetchDataToElement(customerFacet, 'customerFacet', termFacetWriter, 1);
 
-                var customerHoursFacet = buildTermsStatFacet(filterValue, "customer", "hours", 10);
-                fetchDataToElement(customerHoursFacet, 'hoursPerCustomerFacet', hoursPerCustomerWriter, 1);
+            //    var customerHoursFacet = buildTermsStatFacet(filterValue, "customer", "hours", 10);
+            //    fetchDataToElement(customerHoursFacet, 'hoursPerCustomerFacet', hoursPerCustomerWriter, 1);
 
-                var topGuysFacet = buildTermsStatFacet(filterValue, "resource", "hours", 3);
+                var topGuysFacet = buildTermsStatFacet(filterValue, "resource", "hours", 3, "total");
                 fetchDataToElement(topGuysFacet, 'topGuysFacet', topGuysWriter, 1);
 
             }, 200);
@@ -65,16 +65,16 @@ $(document).ready(function () {
     var statQuery = buildStatsQuery(filterValue, "hours");
     fetchDataToElement(statQuery, 'hoursStats', statsWriter, 1);
 
-    var dateHistogram = buildDateFacet(filterValue, "logDate", "year");
-    fetchDataToElement(dateHistogram, 'dateHistogram', dateHistogramWriter, 1);
+   // var dateHistogram = buildDateFacet(filterValue, "logDate", "year");
+   // fetchDataToElement(dateHistogram, 'dateHistogram', dateHistogramWriter, 1);
 
     //var customerFacet = buildTermFacet(filterValue, "customer", 10);
     //fetchDataToElement(customerFacet, 'customerFacet', termFacetWriter, 1);
 
-    var customerHoursFacet = buildTermsStatFacet(filterValue, "customer", "hours", 10);
-    fetchDataToElement(customerHoursFacet, 'hoursPerCustomerFacet', hoursPerCustomerWriter, 1);
+   // var customerHoursFacet = buildTermsStatFacet(filterValue, "customer", "hours", 10);
+   // fetchDataToElement(customerHoursFacet, 'hoursPerCustomerFacet', hoursPerCustomerWriter, 1);
 
-    var topGuysFacet = buildTermsStatFacet(filterValue, "resource", "hours", 3);
+    var topGuysFacet = buildTermsStatFacet(filterValue, "resource", "hours", 3, "total");
     fetchDataToElement(topGuysFacet, 'topGuysFacet', topGuysWriter, 1);
 
     handleButtonEvents();

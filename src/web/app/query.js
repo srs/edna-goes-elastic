@@ -106,20 +106,21 @@ function buildTermFacet(filterString, field, size) {
     return queryObj;
 }
 
-function appendTermStatFacet(queryObj, key, value, size) {
+function appendTermStatFacet(queryObj, key, value, size, order) {
     queryObj.facets = {};
     queryObj.facets.tag_term_stat = {};
     queryObj.facets.tag_term_stat.terms_stats = {};
     queryObj.facets.tag_term_stat.terms_stats.key_field = key;
     queryObj.facets.tag_term_stat.terms_stats.value_field = value;
     queryObj.facets.tag_term_stat.terms_stats.size = size;
+    queryObj.facets.tag_term_stat.terms_stats.order = order;
 }
 
-function buildTermsStatFacet(filterString, key, value, size) {
+function buildTermsStatFacet(filterString, key, value, size, order) {
     var queryObj = {};
     applyFilterQuery(queryObj, filterString);
     applySizeSettings(queryObj, 0, 0);
-    appendTermStatFacet(queryObj, key, value, size);
+    appendTermStatFacet(queryObj, key, value, size, order);
 
     console.log(queryObj);
 

@@ -33,9 +33,16 @@
     </div>
     <div class="row">
 
+        <div id="east" class="span8 result-set">
+            <div class="btn-toolbar">
+                <div id="mainPager" class="btn-group"></div>
+            </div>
+            <div id="searchResult" class="resultRows"></div>
+        </div>
+
+
         <div id="west" class="span4">
-            <div class="facets">
-                Top robots
+            <div class="top-robot-list">
                 <div id="topGuysFacet"></div>
             </div>
             <div id="hoursStats" class="facets"></div>
@@ -44,12 +51,6 @@
             <div id="hoursPerCustomerFacet" class="facets"></div>
         </div>
 
-        <div id="east" class="span8 result-set">
-            <div class="btn-toolbar">
-                <div id="mainPager" class="btn-group"></div>
-            </div>
-            <div id="searchResult" class="resultRows"></div>
-        </div>
 
     </div>
 </div>
@@ -88,7 +89,10 @@
 
 
 <script id="top-guys-template" type="text/x-mustache-template">
+    <div class="robot-list-element">
     <img src="{{avatarUrl}}" title="{{term}} - total hours: {{total}}"/>
+        {{term}} - {{percentage}}%
+    </div>
 </script>
 
 </body>
