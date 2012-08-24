@@ -148,14 +148,17 @@ function statsWriter(writeElementId, data, page) {
 
     var resultRows = $("#" + writeElementId);
 
-    console.log(data.facets.stat1);
+    data.facets.stat1.total = roundToOneDecimal(data.facets.stat1.total);
+    data.facets.stat1.mean = roundToOneDecimal(data.facets.stat1.mean);
 
-    resultRows.append('<h4>Hours:</h4> ');
-    resultRows.append('<div class="facetEntry">hits: ' + data.facets.stat1.count + "</div> ");
-    resultRows.append('<div class="facetEntry">sum: ' + Math.round(data.facets.stat1.total) + "</div> ");
-    resultRows.append('<div class="facetEntry">avg: ' + Math.round(data.facets.stat1.mean) + "</div> ");
-    resultRows.append('<div class="facetEntry">min: ' + Math.round(data.facets.stat1.min) + "</div> ");
-    resultRows.append('<div class="facetEntry">max: ' + Math.round(data.facets.stat1.max) + "</div> ");
+    var source = $("#hour-stats-template").html();
+    var result = Mustache.render(source, data.facets.stat1);
+
+    resultRows.append(result);
+}
+
+function roundToOneDecimal(number) {
+    return Math.round(number * 10) / 10;
 }
 
 
