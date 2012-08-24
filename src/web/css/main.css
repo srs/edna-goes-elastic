@@ -1,6 +1,6 @@
 body {
     padding: 30px;
-    background-color: #ffffff;
+    background: #fff url("../images/logo.jpg") no-repeat bottom right;
 }
 
 input {

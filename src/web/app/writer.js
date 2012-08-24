@@ -2,14 +2,16 @@
 function getAvatarUrl(user, size) {
     var email = user.toLowerCase() + "@enonic.com";
     var hash = md5(email);
-    return "http://www.gravatar.com/avatar/" + hash + ".jpg?s=" + size + "&d=monsterid";
+
+    // return "http://www.gravatar.com/avatar/" + hash + ".jpg?s=" + size + "&d=monsterid";
+    return "http://robohash.org/" + hash + ".png?size=" + size + "x" + size + "&set=set1";
 }
 
 function writeLogEntryElements(writeElementId, logEntryElement) {
     var logEntrySource = logEntryElement._source;
     var rowResult = $("#" + writeElementId);
 
-    logEntrySource.avatarUrl = getAvatarUrl(logEntrySource.resource, 50);
+    logEntrySource.avatarUrl = getAvatarUrl(logEntrySource.resource, 60);
 
     var source = $("#log-entry-template").html();
     var result = Mustache.render(source, logEntrySource);
