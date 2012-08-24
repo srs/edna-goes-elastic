@@ -120,8 +120,15 @@ function buildTermsStatFacet(filterString, key, value, size) {
     applyFilterQuery(queryObj, filterString);
     applySizeSettings(queryObj, 0, 0);
     appendTermStatFacet(queryObj, key, value, size);
+
+    console.log(queryObj);
+
     return queryObj
 }
+
+
+
+
 
 
 

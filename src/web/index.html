@@ -21,7 +21,9 @@
 <body>
 
 <div class="container">
+
     <div id="north" class="row">
+        <h1>Robot Work Log</h1><br/>
         <div class="span12">
             <input id="searchField" type="text" x-webkit-speech/>
         </div>
@@ -29,6 +31,10 @@
     <div class="row">
 
         <div id="west" class="span4">
+            <div class="facets">
+                Top robots
+                <div id="topGuysFacet"></div>
+            </div>
             <div id="hoursStats" class="facets"></div>
             <div id="dateHistogram" class="facets"></div>
             <div id="customerFacet" class="facets"></div>
@@ -49,8 +55,11 @@
     <div style="margin-top: 10px">
         <div class="row result">
             <img src="{{avatarUrl}}" style="float: left; margin-right: 10px;"/>
+
             <div>
-                <h4 style="text-overflow: ellipsis; width: 500px; overflow:hidden; white-space: nowrap" title="{{description}}">{{description}}</h4>
+                <h4 style="text-overflow: ellipsis; width: 500px; overflow:hidden; white-space: nowrap" title="{{description}}">
+                    {{description}}</h4>
+
                 <div style="text-overflow: ellipsis; width: 450px; overflow:hidden; white-space: nowrap" title="{{customer}} - {{project}}">
                     {{customer}} - {{project}}
                 </div>
@@ -66,13 +75,18 @@
 
 <div id="hour-stats-template" class="facets" style="display: none">
     <h4>Hour stats:</h4>
-    <div class="facetEntry">Total hits: {{count}} </div>
-    <div class="facetEntry">Total hours:  {{total}} </div>
-    <div class="facetEntry">Avg hours:  {{mean}} </div>
-    <div class="facetEntry">Minimum:  {{min}} </div>
-    <div class="facetEntry">Maximum:  {{max}} </div>
+
+    <div class="facetEntry">Total hits: {{count}}</div>
+    <div class="facetEntry">Total hours: {{total}}</div>
+    <div class="facetEntry">Avg hours: {{mean}}</div>
+    <div class="facetEntry">Minimum: {{min}}</div>
+    <div class="facetEntry">Maximum: {{max}}</div>
 </div>
 
+
+<script id="top-guys-template" type="text/x-mustache-template">
+    <img src="{{avatarUrl}}" title="{{term}} - total hours: {{total}}"/>
+</script>
 
 </body>
 </html>
