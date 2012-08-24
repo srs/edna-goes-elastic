@@ -28,6 +28,7 @@
     <div class="row">
 
         <div id="west" class="span4">
+            <div id="topGuysFacet" class="facets"></div>
             <div id="hoursStats" class="facets"></div>
             <div id="dateHistogram" class="facets"></div>
             <div id="customerFacet" class="facets"></div>
@@ -63,7 +64,7 @@
     </div>
 </script>
 
-<div id="hour-stats-template" class="facets" style="display: none">
+<div id="hour-stats-template" class="facets" style="display: none" >
     <h4>Hour stats:</h4>
     <div class="facetEntry">Total hits: {{count}} </div>
     <div class="facetEntry">Total hours:  {{total}} </div>
@@ -72,6 +73,10 @@
     <div class="facetEntry">Maximum:  {{max}} </div>
 </div>
 
+
+<script id="top-guys-template" type="text/x-mustache-template">
+    <div class="facetEntry"><img src="{{avatarUrl}}" title="{{term}} - total hours: {{total}}"/></div>
+</script>
 
 </body>
 </html>
