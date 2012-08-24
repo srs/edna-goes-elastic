@@ -11,6 +11,7 @@
     <script src="lib/jquery/jquery-1.7.2.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="lib/jquery.timeago.js" type="text/javascript" charset="utf-8"></script>
     <script src="lib/mustache.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/md5.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="app/config.js" type="text/javascript" charset="utf-8"></script>
     <script src="app/writer.js" type="text/javascript" charset="utf-8"></script>
     <script src="app/query.js" type="text/javascript" charset="utf-8"></script>
@@ -43,10 +44,10 @@
     </div>
 </div>
 
-<div id="log-entry-template" style="display: none">
+<script id="log-entry-template" type="text/x-mustache-template">
     <div class="row result">
+        <img src="{{avatarUrl}}"/>
         <h4><a href="#">{{description}}</a></h4>
-
         <div>{{customer}} - {{project}}</div>
         <div>
             <span class="label label-resource">{{resource}}</span>&nbsp;
@@ -54,7 +55,7 @@
             <span class="badge badge-success">{{hours}}</span>&nbsp;
         </div>
     </div>
-</div>
+</script>
 
 </body>
 </html>
