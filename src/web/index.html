@@ -30,6 +30,10 @@
     <div class="row">
 
         <div id="west" class="span4">
+            <div class="facets">
+                Top robots
+                <div id="topGuysFacet"></div>
+            </div>
             <div id="hoursStats" class="facets"></div>
             <div id="dateHistogram" class="facets"></div>
             <div id="customerFacet" class="facets"></div>
@@ -78,6 +82,10 @@
     <div class="facetEntry">Maximum: {{max}}</div>
 </div>
 
+
+<script id="top-guys-template" type="text/x-mustache-template">
+    <img src="{{avatarUrl}}" title="{{term}} - total hours: {{total}}"/>
+</script>
 
 </body>
 </html>

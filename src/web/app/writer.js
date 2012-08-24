@@ -1,4 +1,3 @@
-
 function getAvatarUrl(user, size) {
     var email = user.toLowerCase() + "@enonic.com";
     var hash = md5(email);
@@ -20,8 +19,6 @@ function writeLogEntryElements(writeElementId, logEntryElement) {
 }
 
 function getNumberOfPagesNeeded(total, resultSize) {
-
-    console.log("Total: " + total + ", size: " + resultSize);
 
     var numberOfPages = Math.ceil(total / resultSize) - 1;
     return numberOfPages;
@@ -61,26 +58,17 @@ function logEntryPagerWriter(writeElementId, data, currentPage) {
         var startAtBeginning = parseInt(currentPage) - parseInt(pageOffsetFromCurrent) <= 0;
         var endAtNumberOfPagesNeeded = parseInt(currentPage) + parseInt(pageOffsetFromCurrent) >= parseInt(numberOfPagesNeeded);
 
-        //console.log("pageOffFromCurr: " + pageOffsetFromCurrent + ", startAtBegin: " + startAtBeginning + ", endAtNumb: " +
-        //            endAtNumberOfPagesNeeded);
-
-        //console.log("numberOfPagesNeeded: " + numberOfPagesNeeded + ", numberOfPagesToShow: " + numberOfPagesToShow);
 
         if (startAtBeginning) {
-            console.log("in startAt");
             rangeStart = 1;
             rangeEnd = PAGER_MAX_PAGES;
         } else if (endAtNumberOfPagesNeeded) {
-            console.log("in endAtNumber");
             rangeStart = parseInt(numberOfPagesNeeded) - parseInt(numberOfPagesToShow);
             rangeEnd = numberOfPagesNeeded;
         } else {
-            console.log("in else");
             rangeStart = parseInt(currentPage) - parseInt(pageOffsetFromCurrent) + 1;
             rangeEnd = parseInt(currentPage) + parseInt(pageOffsetFromCurrent) - 1;
         }
-
-        console.log("start: " + rangeStart + ", rangeEnd: " + rangeEnd);
 
         if (currentPage <= rangeEnd) {
             activateNextButton = true;
@@ -168,13 +156,9 @@ function termFacetWriter(writeElementId, data, page) {
 
     var resultRows = $("#" + writeElementId);
 
-    console.log(data.facets.tag);
-
     resultRows.append("<h4>Customers:</h4> ");
 
     $.each(data.facets.tag.terms, function (index, facetEntry) {
-
-        console.log(facetEntry);
         resultRows.append('<div class="facetEntry">' + facetEntry.term + " (" + facetEntry.count + ")</div> ");
     });
 }
@@ -182,8 +166,6 @@ function termFacetWriter(writeElementId, data, page) {
 function dateHistogramWriter(writeElementId, data, page) {
 
     var resultRows = $("#" + writeElementId);
-
-    console.log(data.facets.histo1);
 
     resultRows.append("<h4>Date histogram:</h4> ");
 
@@ -197,8 +179,6 @@ function hoursPerCustomerWriter(writeElementId, data, page) {
 
     var resultRows = $("#" + writeElementId);
 
-    console.log(data.facets.tag_term_stat.terms);
-
     resultRows.append("<h4>Customer hours:</h4> ");
 
     $.each(data.facets.tag_term_stat.terms, function (index, facetEntry) {
@@ -207,6 +187,24 @@ function hoursPerCustomerWriter(writeElementId, data, page) {
         resultRows.append('<div class="facetEntry">' + facetEntry.term + " (" + facetEntry.count + ") = " + Math.round(facetEntry.total) +
                           " hours </div> ");
     });
+}
+
+function topGuysWriter(writeElementId, data, page) {
+
+    var resultRows = $("#" + writeElementId);
+
+    console.log(data.facets.tag_term_stat.terms);
+
+    $.each( data.facets.tag_term_stat.terms, function (index, facetEntry) {
+
+        facetEntry.avatarUrl = getAvatarUrl(facetEntry.term, 50);
+
+        var source = $("#top-guys-template").html();
+        var result = Mustache.render(source, facetEntry);
+        resultRows.append(result);
+    });
+
+
 }
 
 

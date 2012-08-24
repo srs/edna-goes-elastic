@@ -47,6 +47,9 @@ function handleFilterChanges() {
                 var customerHoursFacet = buildTermsStatFacet(filterValue, "customer", "hours", 10);
                 fetchDataToElement(customerHoursFacet, 'hoursPerCustomerFacet', hoursPerCustomerWriter, 1);
 
+                var topGuysFacet = buildTermsStatFacet(filterValue, "resource", "hours", 3);
+                fetchDataToElement(topGuysFacet, 'topGuysFacet', topGuysWriter, 1);
+
             }, 200);
         }
     });
@@ -70,6 +73,9 @@ $(document).ready(function () {
 
     var customerHoursFacet = buildTermsStatFacet(filterValue, "customer", "hours", 10);
     fetchDataToElement(customerHoursFacet, 'hoursPerCustomerFacet', hoursPerCustomerWriter, 1);
+
+    var topGuysFacet = buildTermsStatFacet(filterValue, "resource", "hours", 3);
+    fetchDataToElement(topGuysFacet, 'topGuysFacet', topGuysWriter, 1);
 
     handleButtonEvents();
     handleFilterChanges();
