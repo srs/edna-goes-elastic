@@ -1,17 +1,13 @@
+
 function writeLogEntryElements(writeElementId, logEntryElement) {
     var logEntrySource = logEntryElement._source;
     var rowResult = $("#" + writeElementId);
-    rowResult.append('<div class="row result">' +
-                     '<h4><a href="#">' + logEntrySource.description + '</a></h4>' +
-                     '<div>' + logEntrySource.customer + ' - ' + logEntrySource.project + '</div>' +
-                     '<div>' +
-                     '<span class="label label-resource">' + logEntrySource.resource + '</span>' + '&nbsp;' +
-                     '<span class="badge badge-error">' + logEntrySource.logDate + '</span>&nbsp;' +
-                     '<span class="badge badge-success">' + logEntrySource.hours + '</span>' + '&nbsp;' +
-                     '</div>' +
-                     '</div>');
-}
 
+    var source = $("#log-entry-template").html();
+    var result = Mustache.render(source, logEntrySource);
+
+    rowResult.append(result);
+}
 
 function getNumberOfPagesNeeded(total, resultSize) {
 
@@ -136,6 +132,7 @@ function logEntryWriter(writeElementId, data, page) {
         });
     }
 
+    jQuery("abbr.timeago").timeago();
     logEntryPagerWriter(writeElementId, data, page);
 }
 
