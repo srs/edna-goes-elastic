@@ -45,14 +45,20 @@
 </div>
 
 <script id="log-entry-template" type="text/x-mustache-template">
-    <div class="row result">
-        <img src="{{avatarUrl}}"/>
-        <h4><a href="#">{{description}}</a></h4>
-        <div>{{customer}} - {{project}}</div>
-        <div>
-            <span class="label label-resource">{{resource}}</span>&nbsp;
-            <span class="badge badge-error"><abbr class="timeago" title="{{logDate}}"></abbr></span>&nbsp;
-            <span class="badge badge-success">{{hours}}</span>&nbsp;
+    <div style="margin-top: 10px">
+        <div class="row result">
+            <img src="{{avatarUrl}}" style="float: left; margin-right: 10px;"/>
+            <div>
+                <h4 style="text-overflow: ellipsis; width: 500px; overflow:hidden; white-space: nowrap" title="{{description}}">{{description}}</h4>
+                <div style="text-overflow: ellipsis; width: 450px; overflow:hidden; white-space: nowrap" title="{{customer}} - {{project}}">
+                    {{customer}} - {{project}}
+                </div>
+                <div>
+                    <span class="label label-resource">{{resource}}</span>&nbsp;
+                    <span class="badge badge-error"><abbr class="timeago" title="{{logDate}}"></abbr></span>&nbsp;
+                    <span class="badge badge-success">{{hours}}</span>&nbsp;
+                </div>
+            </div>
         </div>
     </div>
 </script>
