@@ -1,5 +1,7 @@
+var topRobots = [];
+
 function getFilterValue() {
-    return $("#searchField").val().toLowerCase();
+    return $("#searchField").val();
 }
 function handleButtonEvents() {
     $("body").on("click", ".btn", function (event) {
@@ -8,7 +10,6 @@ function handleButtonEvents() {
         $('.btn').removeClass("active");
         button.addClass("active");
         var currPage = button.attr("data-pagenum");
-        console.log("CurrPage: " + currPage);
 
         var query = buildSearchFilter(getFilterValue(), currPage, RESULT_COUNT);
         fetchDataToElement(query, 'searchResult', logEntryWriter, currPage);
@@ -23,9 +24,6 @@ var delay = (function () {
     };
 })();
 
-var searchResultReady = jQuery.Event("searchResult");
-var startQueryReady = jQuery.Event("statQueryReady");
-var togGuyFacetReady = jQuery.Event("topGuysFacet");
 
 function handleFilterChanges() {
 
@@ -37,12 +35,12 @@ function handleFilterChanges() {
             delay(function () {
 
                 var query = buildSearchFilter(filterValue, 0, RESULT_COUNT);
-                fetchDataToElement(query, 'searchResult', logEntryWriter, 1, searchResultReady);
+                fetchDataToElement(query, 'searchResult', logEntryWriter, 1);
 
                 var statQuery = buildStatsQuery(filterValue, "hours");
-                fetchDataToElement(statQuery, 'hoursStats', statsWriter, 1, startQueryReady);
+                fetchDataToElement(statQuery, 'hoursStats', statsWriter, 1);
 
-            }, 200);
+            }, 500);
         }
     });
 }
@@ -52,7 +50,16 @@ $(document).bind('hoursStatsReady', function (event) {
 
     var filterValue = getFilterValue();
     var topGuysFacet = buildTermsStatFacet(filterValue, "resource", "hours", 3, "total");
-    fetchDataToElement(topGuysFacet, 'topGuysFacet', topGuysWriter, 1, togGuyFacetReady);
+    fetchDataToElement(topGuysFacet, 'topGuysFacet', topGuysWriter, 1);
+})
+
+$(document).bind('topGuysFacetReady', function (event) {
+
+    for (var i = 0; i < topRobots.length; i++) {
+        var filterValue = getFilterValue();
+        var worklogFacet = buildWorklogFilter(filterValue, topRobots[i], "logDate", "year");
+        fetchDataToElement(worklogFacet, 'worklogChart' + topRobots[i], worklogWriter, 1);
+    }
 })
 
 $(document).ready(function () {
@@ -63,10 +70,11 @@ $(document).ready(function () {
     fetchDataToElement(query, 'searchResult', logEntryWriter, 1);
 
     var statQuery = buildStatsQuery(filterValue, "hours");
-    fetchDataToElement(statQuery, 'hoursStats', statsWriter, 1, startQueryReady);
+    fetchDataToElement(statQuery, 'hoursStats', statsWriter, 1);
 
     handleButtonEvents();
     handleFilterChanges();
+
 });
 
 

@@ -140,15 +140,15 @@ function statsWriter(writeElementId, data, page) {
 
     //var resultRows = $("#" + writeElementId);
 
-   // data.facets.stat1.total = roundToOneDecimal(data.facets.stat1.total);
-   // data.facets.stat1.mean = roundToOneDecimal(data.facets.stat1.mean);
+    // data.facets.stat1.total = roundToOneDecimal(data.facets.stat1.total);
+    // data.facets.stat1.mean = roundToOneDecimal(data.facets.stat1.mean);
 
     totalHours = data.facets.stat1.total;
 
-   // var source = $("#hour-stats-template").html();
-   // var result = Mustache.render(source, data.facets.stat1);
+    // var source = $("#hour-stats-template").html();
+    // var result = Mustache.render(source, data.facets.stat1);
 
-   // resultRows.append(result);
+    // resultRows.append(result);
 }
 
 function roundToOneDecimal(number) {
@@ -187,7 +187,6 @@ function hoursPerCustomerWriter(writeElementId, data, page) {
 
     $.each(data.facets.tag_term_stat.terms, function (index, facetEntry) {
 
-        console.log(facetEntry);
         resultRows.append('<div class="facetEntry">' + facetEntry.term + " (" + facetEntry.count + ") = " + Math.round(facetEntry.total) +
                           " hours </div> ");
     });
@@ -197,20 +196,77 @@ function topGuysWriter(writeElementId, data, page) {
 
     var resultRows = $("#" + writeElementId);
 
-    console.log(data.facets.tag_term_stat.terms);
-
     $.each(data.facets.tag_term_stat.terms, function (index, facetEntry) {
+
+        topRobots[index] = facetEntry.term;
 
         facetEntry.avatarUrl = getAvatarUrl(facetEntry.term, 100);
 
         facetEntry.percentage = Math.round((facetEntry.total / totalHours) * 100);
 
+        facetEntry.totalHours = Math.round(facetEntry.total);
+
+        facetEntry.place = index + 1;
+
         var source = $("#top-guys-template").html();
         var result = Mustache.render(source, facetEntry);
+
         resultRows.append(result);
     });
 
+}
+
+function worklogWriter(writeElementId, data, page) {
+
+
+    var actualCategories = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+    var categories = [];
+    var hourValues = [0, 0, 0, 0, 0, 0, 0];
+
+
+    for (var i = 0; i < actualCategories.length; i++) {
+
+        $.each(data.facets.histo1.entries, function (index, histogramEntry) {
+            var date = new Date(histogramEntry.time);
+            var currYear = date.getFullYear();
+
+            if (actualCategories[i] == currYear) {
+                hourValues[i] = histogramEntry.count;
+            }
+        });
+    }
+    console.log("WriteElementId: " + writeElementId);
+
+    chart1 = new Highcharts.Chart({
+        chart: {
+            renderTo: writeElementId,
+            type: 'column',
+            width: 250,
+            height: '70'
+        },
+        legend: {
+            enabled: false
+        },
+        title: null,
+        xAxis: {
+            min: 0,
+            categories: actualCategories
+        },
+        yAxis: {
+            min: 0,
+            title: null
+        },
+        series: [
+            {
+                name: null,
+                data: hourValues
+            }
+        ]
+    });
+
+    console.log(data);
 
 }
+
 
 

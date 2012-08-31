@@ -17,13 +17,16 @@
     <script src="app/writer.js" type="text/javascript" charset="utf-8"></script>
     <script src="app/query.js" type="text/javascript" charset="utf-8"></script>
     <script src="app/main.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/highcharts/js/highcharts.js" type="text/javascript" charset="utf-8"></script>
+
     <link href='http://fonts.googleapis.com/css?family=Galindo' rel='stylesheet' type='text/css'>
+
 </head>
 <body>
 
 <div class="container">
 
-    <img src="images/logo.png" style="position: fixed; right: 0; bottom: 0"/>
+    <!--<img src="images/logo.png" style="position: fixed; right: 0; bottom: 0"/>-->
 
     <div id="north" class="row">
         <h1 style="font-family: 'Galindo', cursive;">Official Mindless Worker Database&trade;</h1><br/>
@@ -43,6 +46,7 @@
 
         <div id="west" class="span4">
             <h4 style="font-family: 'Galindo';">Top mindless workers:</h4><br/>
+
             <div class="top-robot-list">
                 <div id="topGuysFacet"></div>
             </div>
@@ -91,8 +95,22 @@
 
 <script id="top-guys-template" type="text/x-mustache-template">
     <div class="robot-list-element">
-    <img src="{{avatarUrl}}" title="{{term}} - total hours: {{total}}"/>
-        {{term}} - {{percentage}}%
+        <img height="100" width="100" src="{{avatarUrl}}" title="{{term}} - total hours: {{total}}"/>
+
+        <div class="robot-stat-wrapper">
+            <div class="robot-stat-element">
+                #{{place}} : {{term}}
+            </div>
+            <div class="robot-stat-element">
+                Hours: {{totalHours}} ( {{percentage}}% )
+                <progress max="100" value="{{percentage}}"/>
+            </div>
+            <div class="robot-stat-element">
+                <div class="robot-worklog-chart" id="worklogChart{{term}}">
+
+                </div>
+            </div>
+        </div>
     </div>
 </script>
 

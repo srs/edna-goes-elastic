@@ -1,18 +1,13 @@
-function doQueries() {
-
-    // Call fetchDataToElement
-
-    // When all finished, write
-}
-
-
-function fetchDataToElement(query, elementId, writerFunction, page ) {
+function fetchDataToElement(query, elementId, writerFunction, page) {
     $.ajax({
         url: SEARCH_URL,
         type: "POST",
         dataType: "json",
         data: JSON.stringify(query),
         success: function (data) {
+
+            console.log("QYERT: " + JSON.stringify(query));
+
             var resultRowsElements = $('#' + elementId);
             resultRowsElements.empty();
             resultRowsElements.hide();
@@ -23,25 +18,38 @@ function fetchDataToElement(query, elementId, writerFunction, page ) {
     });
 }
 
-function applyFilterQuery(queryObj, filterString) {
+function applySearchFieldQuery(queryObj, filterString) {
 
     queryObj.query = {};
     if (filterString == "") {
         queryObj.query.match_all = {};
     } else if ((filterString.indexOf("*") >= 0)) {
         queryObj.query.wildcard = {};
-        queryObj.query.wildcard._all = filterString;
+        queryObj.query.wildcard._all = filterString.toLowerCase();
     } else {
-        var queryFieldArray = filterString.split(" ");
 
-        if (queryFieldArray.length > 1) {
-            queryObj.query.text = {};
-            queryObj.query.text._all = {};
-            queryObj.query.text._all.operator = "and";
-            queryObj.query.text._all.query = filterString;
+        var fieldArray = filterString.split(":");
+
+        console.log("Split: " + fieldArray);
+
+        if (fieldArray.length < 2 || fieldArray.length > 2) {
+
+            var queryFieldArray = filterString.split(" ");
+
+            if (queryFieldArray.length > 1) {
+                queryObj.query.text = {};
+                queryObj.query.text._all = {};
+                queryObj.query.text._all.operator = "and";
+                queryObj.query.text._all.query = filterString.toLowerCase();
+            } else {
+                queryObj.query.term = {};
+                queryObj.query.term._all = filterString.toLowerCase();
+            }
         } else {
+
+            console.log(fieldArray[0] + " : " + fieldArray[1]);
             queryObj.query.term = {};
-            queryObj.query.term._all = filterString;
+            queryObj.query.term[fieldArray[0]] = fieldArray[1];
         }
     }
 }
@@ -59,9 +67,8 @@ function applySort(queryObject, sortField) {
 function buildSearchFilter(filterString, page, size) {
 
     var queryObj = {};
-    applyFilterQuery(queryObj, filterString);
+    applySearchFieldQuery(queryObj, filterString);
     var newFrom = ( (page ) * size);
-    console.log("NewFrom: " + newFrom);
 
     applySizeSettings(queryObj, newFrom, size);
     applySort(queryObj, "logDate");
@@ -71,7 +78,7 @@ function buildSearchFilter(filterString, page, size) {
 function buildStatsQuery(filterString, field) {
 
     var queryObj = {};
-    applyFilterQuery(queryObj, filterString);
+    applySearchFieldQuery(queryObj, filterString);
     applySizeSettings(queryObj, 0, 0);
 
     queryObj.facets = {};
@@ -91,11 +98,26 @@ function appendDateFacet(queryObj, field, interval) {
 function buildDateFacet(filterString, field, interval) {
 
     var queryObj = {};
-    applyFilterQuery(queryObj, filterString);
+    applySearchFieldQuery(queryObj, filterString);
     applySizeSettings(queryObj, 0, 0);
     appendDateFacet(queryObj, field, interval);
     return queryObj;
 }
+
+function buildWorklogFilter(filterString, resourceName, field, interval) {
+
+    var queryObj = {};
+    applySearchFieldQuery(queryObj, filterString);
+    applySizeSettings(queryObj, 0, 0);
+    appendDateFacet(queryObj, field, interval);
+
+    queryObj.facets.histo1.facet_filter = {
+        "term": { "resource": resourceName}
+    };
+
+    return queryObj;
+}
+
 
 function appendTermFacet(queryObj, field, size) {
     queryObj.facets = {};
@@ -108,7 +130,7 @@ function appendTermFacet(queryObj, field, size) {
 function buildTermFacet(filterString, field, size) {
 
     var queryObj = {};
-    applyFilterQuery(queryObj, filterString);
+    applySearchFieldQuery(queryObj, filterString);
     applySizeSettings(queryObj, 0, 0);
     appendTermFacet(queryObj, field, size);
     return queryObj;
@@ -126,11 +148,9 @@ function appendTermStatFacet(queryObj, key, value, size, order) {
 
 function buildTermsStatFacet(filterString, key, value, size, order) {
     var queryObj = {};
-    applyFilterQuery(queryObj, filterString);
+    applySearchFieldQuery(queryObj, filterString);
     applySizeSettings(queryObj, 0, 0);
     appendTermStatFacet(queryObj, key, value, size, order);
-
-    console.log(queryObj);
 
     return queryObj
 }

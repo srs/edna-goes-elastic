@@ -9,6 +9,16 @@ input {
     font-size: 18px !important;
 }
 
+/*
+progress {
+    background-color:red;
+    border: none;
+}
+
+progress::-webkit-progress-bar-value, progress::-webkit-progress-value,
+progress::-moz-progress-bar {background-color:blue}
+*/
+
 #north {
     text-align: center;
     margin-bottom: 2em;
@@ -50,8 +60,33 @@ input {
 }
 
 .robot-list-element {
-    width: 250px;
+    width: 350px;
     box-shadow: 0 0 5px #B0B0B0;
     margin-top: 1em;
     margin-bottom: 1em;
+    overflow: hidden;
+}
+
+.robot-list-element img {
+    float: left;
+    display: block;
+}
+
+.robot-stat-wrapper {
+    float: left;
+    width: 250px;
+    /*width: 100%;*/
+}
+
+.robot-stat-element {
+    font-family: 'Galindo', cursive;
+    font-size: 0.7em;
+
+}
+.robot-stat-element progress {
+    width: 90%;
+}
+
+.robot-worklog-chart {
+    height: 57px;
 }
