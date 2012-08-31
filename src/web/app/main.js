@@ -23,6 +23,10 @@ var delay = (function () {
     };
 })();
 
+var searchResultReady = jQuery.Event("searchResult");
+var startQueryReady = jQuery.Event("statQueryReady");
+var togGuyFacetReady = jQuery.Event("topGuysFacet");
+
 function handleFilterChanges() {
 
     $("#searchField").keyup(function (event) {
@@ -31,29 +35,25 @@ function handleFilterChanges() {
 
         if (filterValue.length == 0 || filterValue.length >= 3) {
             delay(function () {
+
                 var query = buildSearchFilter(filterValue, 0, RESULT_COUNT);
-                console.log(JSON.stringify(query));
-                fetchDataToElement(query, 'searchResult', logEntryWriter, 1);
+                fetchDataToElement(query, 'searchResult', logEntryWriter, 1, searchResultReady);
 
                 var statQuery = buildStatsQuery(filterValue, "hours");
-                fetchDataToElement(statQuery, 'hoursStats', statsWriter, 1);
-
-            //    var dateHistogram = buildDateFacet(filterValue, "logDate", "year");
-            //    fetchDataToElement(dateHistogram, 'dateHistogram', dateHistogramWriter, 1);
-
-             //   var customerFacet = buildTermFacet(filterValue, "customer", 10);
-             //   fetchDataToElement(customerFacet, 'customerFacet', termFacetWriter, 1);
-
-            //    var customerHoursFacet = buildTermsStatFacet(filterValue, "customer", "hours", 10);
-            //    fetchDataToElement(customerHoursFacet, 'hoursPerCustomerFacet', hoursPerCustomerWriter, 1);
-
-                var topGuysFacet = buildTermsStatFacet(filterValue, "resource", "hours", 3, "total");
-                fetchDataToElement(topGuysFacet, 'topGuysFacet', topGuysWriter, 1);
+                fetchDataToElement(statQuery, 'hoursStats', statsWriter, 1, startQueryReady);
 
             }, 200);
         }
     });
 }
+
+
+$(document).bind('hoursStatsReady', function (event) {
+
+    var filterValue = getFilterValue();
+    var topGuysFacet = buildTermsStatFacet(filterValue, "resource", "hours", 3, "total");
+    fetchDataToElement(topGuysFacet, 'topGuysFacet', topGuysWriter, 1, togGuyFacetReady);
+})
 
 $(document).ready(function () {
 
@@ -63,19 +63,7 @@ $(document).ready(function () {
     fetchDataToElement(query, 'searchResult', logEntryWriter, 1);
 
     var statQuery = buildStatsQuery(filterValue, "hours");
-    fetchDataToElement(statQuery, 'hoursStats', statsWriter, 1);
-
-   // var dateHistogram = buildDateFacet(filterValue, "logDate", "year");
-   // fetchDataToElement(dateHistogram, 'dateHistogram', dateHistogramWriter, 1);
-
-    //var customerFacet = buildTermFacet(filterValue, "customer", 10);
-    //fetchDataToElement(customerFacet, 'customerFacet', termFacetWriter, 1);
-
-   // var customerHoursFacet = buildTermsStatFacet(filterValue, "customer", "hours", 10);
-   // fetchDataToElement(customerHoursFacet, 'hoursPerCustomerFacet', hoursPerCustomerWriter, 1);
-
-    var topGuysFacet = buildTermsStatFacet(filterValue, "resource", "hours", 3, "total");
-    fetchDataToElement(topGuysFacet, 'topGuysFacet', topGuysWriter, 1);
+    fetchDataToElement(statQuery, 'hoursStats', statsWriter, 1, startQueryReady);
 
     handleButtonEvents();
     handleFilterChanges();

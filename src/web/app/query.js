@@ -1,16 +1,24 @@
-function fetchDataToElement(query, elementId, writerFunction, page) {
+function doQueries() {
+
+    // Call fetchDataToElement
+
+    // When all finished, write
+}
+
+
+function fetchDataToElement(query, elementId, writerFunction, page ) {
     $.ajax({
         url: SEARCH_URL,
         type: "POST",
         dataType: "json",
         data: JSON.stringify(query),
         success: function (data) {
-
             var resultRowsElements = $('#' + elementId);
             resultRowsElements.empty();
             resultRowsElements.hide();
             writerFunction.call(window, elementId, data, page);
             resultRowsElements.fadeIn(RESULT_FADEIN_MS);
+            jQuery(document).trigger(elementId + "Ready");
         }
     });
 }

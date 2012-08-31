@@ -1,11 +1,11 @@
 var totalHours;
 
-function getAvatarUrl(user, size) {
+function getAvatarUrl(user, size, params) {
     var email = user.toLowerCase() + "@enonic.com";
     var hash = md5(email);
 
     // return "http://www.gravatar.com/avatar/" + hash + ".jpg?s=" + size + "&d=monsterid";
-    return "http://robohash.org/" + hash + ".png?size=" + size + "x" + size + "&set=set1";
+    return "http://robohash.org/" + hash + ".png?size=" + size + "x" + size + "&set=set1" + params;
 }
 
 function writeLogEntryElements(writeElementId, logEntryElement) {
